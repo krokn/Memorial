@@ -11,7 +11,7 @@ from src.services.encrypt import Encrypt
 
 router = APIRouter(
     prefix="/api/post",
-    tags=["Auth"],
+    tags=["Posts"],
 )
 
 
@@ -24,7 +24,7 @@ async def addPost(post: postSchemaToAdd, token: str | None = Header(default=None
 
 @router.get('')
 async def getAllApprovedPost():
-    posts = await PostRepository().getAll()
+    posts = await PostRepository().getAllApproved()
     dictPosts = await allPostsJson(posts)
     return JSONResponse(status_code=HTTPStatus.OK, content=dictPosts)
 

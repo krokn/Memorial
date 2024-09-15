@@ -15,3 +15,21 @@ async def allPostsJson(posts: List[PostModel]):
         for post in posts
     ]
     return posts_dict
+
+
+async def allPostsJsonForAdmin(posts: List[PostModel]):
+    posts_dict = [
+        {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'linkToPhoto': post.linkToPhoto,
+            'name': post.user.name,
+            'surname': post.user.surname,
+            'fatherName': post.user.fatherName,
+            'email': post.user.email
+        }
+        for post in posts
+    ]
+    return posts_dict
+
