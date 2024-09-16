@@ -14,7 +14,9 @@ class UserModel(Base):
     email: Mapped[str] = mapped_column(unique=True)
     idEducationInstitution: Mapped[int] = mapped_column(ForeignKey("educationInstitution.id"))
 
-    EducationInstitution: Mapped["EducationInstitutionModel"] = relationship('EducationInstitutionModel', uselist=False)
+    post: Mapped["PostModel"] = relationship("PostModel", back_populates="user", uselist=True, )
+
+    EducationInstitution: Mapped["EducationInstitutionModel"] = relationship('EducationInstitutionModel', uselist=False, lazy="joined")
 
 
 class EducationInstitutionModel(Base):
@@ -35,6 +37,8 @@ class PostModel(Base):
     x: Mapped[float] = mapped_column()
     y: Mapped[float] = mapped_column()
     idUser: Mapped[int] = mapped_column(ForeignKey('user.id'))
+
+    user: Mapped["UserModel"] = relationship("UserModel", back_populates="post", uselist=True, lazy="joined")
 
 
 class PostUserModel(Base):

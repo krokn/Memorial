@@ -16,8 +16,22 @@ class PostRepository:
             await session.commit()
 
     @staticmethod
-    async def getAll() -> List[PostModel]:
+    async def getAllApproved() -> List[PostModel]:
         async with get_async_session() as session:
             query = select(PostModel).where(PostModel.isApproved == True)
             result = await session.execute(query)
             return result.scalars().all()
+
+    @staticmethod
+    async def getAllNotApproved() -> List[PostModel]:
+        async with get_async_session() as session:
+            query = select(PostModel).where(PostModel.isApproved == False)
+            result = await session.execute(query)
+            return result.scalars().all()
+
+    @staticmethod
+    async def getOne(idPost: int) -> PostModel:
+        async with get_async_session() as session:
+            query = select(PostModel).where(PostModel.id == idPost)
+            result = await session.execute(query)
+            return result.scalars().first()
