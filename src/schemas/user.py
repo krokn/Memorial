@@ -15,3 +15,7 @@ class UserSchema(BaseModel):
     fatherName: str
     idEducationInstitution: int
     email: EmailStr
+
+
+class UserSchemaEmail(BaseModel):
+    email: EmailStr

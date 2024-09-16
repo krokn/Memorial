@@ -21,6 +21,6 @@ class UserRepository:
         async with get_async_session() as session:
             query = select(UserModel).where(UserModel.email == email)
             result = await session.execute(query)
-            return result.scalars().first()\
+            return result.scalars().one_or_none()
 
 
