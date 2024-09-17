@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from fastapi import APIRouter, HTTPException
+from loguru import logger
 from starlette.responses import JSONResponse
 
 from src.core.user import UserCore
@@ -35,7 +36,8 @@ async def loginUser(user: UserSchemaEmail):
 @router.post('/code')
 async def verifyCode(code: int, user: UserSchemaForAuth):
     saved_code = redis_client.get(user.email)
-    if saved_code != code:
+    logger.info(f'saved_code = {saved_code}, code_user = {code}')
+    if int(saved_code) != code:
         raise HTTPException(status_code=406, detail="incorrect code")
     await UserCore().addUser(user)
     token = Encrypt().create_token(user.email)
