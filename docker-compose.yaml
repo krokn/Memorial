@@ -9,7 +9,7 @@ services:
     ports:
       - "5400:5432"
     networks:
-      - default
+      - my_network
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
@@ -42,7 +42,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: celery -A src.services.celery worker --loglevel=info
+    command: celery -A src.services.Celery worker --loglevel=info
     depends_on:
       - redis
       - postgres

@@ -20,7 +20,7 @@ router = APIRouter(
 async def authUser(user: UserSchemaForAuth):
     if await UserRepository().get(user.email) is not None:
         raise HTTPException(status_code=403, detail=f"user register, can login")
-    send_email.delay(user.identifier, create_code_for_email_and_save_code(user.email))
+    send_email.delay(user.email, create_code_for_email_and_save_code(user.email))
     return JSONResponse(status_code=HTTPStatus.OK, content='code send success')
 
 
@@ -28,7 +28,7 @@ async def authUser(user: UserSchemaForAuth):
 async def loginUser(user: UserSchemaEmail):
     if await UserRepository().get(user.email) is None:
         raise HTTPException(status_code=405, detail=f"user dont register, can register")
-    send_email.delay(user.identifier, create_code_for_email_and_save_code(user.email))
+    send_email.delay(user.email, create_code_for_email_and_save_code(user.email))
     return JSONResponse(status_code=HTTPStatus.OK, content='code send success')
 
 
