@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
     ports:
-      - "8080:8000"
+      - "8000:8000"
     depends_on:
       - postgres
       - redis
@@ -50,6 +50,18 @@ services:
       - my_network
     volumes:
       - logs:/app/logs
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - fastapi
+    networks:
+      - my_network
 
 networks:
   my_network:
