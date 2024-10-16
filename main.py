@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from src.api.routers import all_routers
+from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title='Хеллоу Мария'
