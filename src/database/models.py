@@ -12,6 +12,7 @@ class UserModel(Base):
     surname: Mapped[str] = mapped_column()
     fatherName: Mapped[str] = mapped_column()
     email: Mapped[str] = mapped_column(unique=True)
+    isAdmin: Mapped[bool] = mapped_column()
     idEducationInstitution: Mapped[int] = mapped_column(ForeignKey("educationInstitution.id"))
 
     post: Mapped["PostModel"] = relationship("PostModel", back_populates="user", uselist=True, )
@@ -33,18 +34,13 @@ class PostModel(Base):
     title: Mapped[str] = mapped_column()
     content: Mapped[str] = mapped_column()
     linkToPhoto: Mapped[str] = mapped_column()
-    isApproved: Mapped[bool] = mapped_column(default=False)
+    isApproved: Mapped[str] = mapped_column(default='False')
     x: Mapped[float] = mapped_column()
     y: Mapped[float] = mapped_column()
     idUser: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    address: Mapped[str] = mapped_column()
 
     user: Mapped["UserModel"] = relationship("UserModel", back_populates="post", uselist=True, lazy="joined")
 
 
-class PostUserModel(Base):
-    __tablename__ = 'postUser'
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    idUser: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    idPost: Mapped[int] = mapped_column(ForeignKey('post.id'))
 

@@ -9,6 +9,10 @@ class UserSchemaForAuth(BaseModel):
     email: EmailStr
 
 
+class UserSchemaForLoginSendCode(BaseModel):
+    email: EmailStr
+
+
 class UserSchema(BaseModel):
     name: str
     surname: str

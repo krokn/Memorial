@@ -11,7 +11,10 @@ class AdminCore:
         return postJson
 
     @staticmethod
-    async def changeApproved(idPost: int):
+    async def changeApproved(idPost: int, status: str):
         post = await PostRepository().getOne(idPost)
-        post.isApproved = True
+        if status == 'True':
+            post.isApproved = 'True'
+        else:
+            post.isApproved = 'False'
         await PostRepository().post(post)

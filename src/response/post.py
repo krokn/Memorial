@@ -1,6 +1,6 @@
 from typing import List
 
-from src.database.models import PostModel
+from src.database.models import PostModel, EducationInstitutionModel
 
 
 async def allPostsJson(posts: List[PostModel]):
@@ -15,6 +15,16 @@ async def allPostsJson(posts: List[PostModel]):
         for post in posts
     ]
     return posts_dict
+
+
+async def get_all_institution(institutions: List[EducationInstitutionModel]):
+    institutions_dict = [
+        {
+            'name': institution.name
+        }
+        for institution in institutions
+    ]
+    return institutions_dict
 
 
 async def allPostsJsonForAdmin(posts: List[PostModel]):
@@ -32,4 +42,3 @@ async def allPostsJsonForAdmin(posts: List[PostModel]):
         for post in posts
     ]
     return posts_dict
-

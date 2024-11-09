@@ -20,7 +20,8 @@ class PostCore:
             linkToPhoto=post.linkToPhoto,
             x=post.x,
             y=post.y,
-            idUser=user.id
+            idUser=user.id,
+            isApproved='in_progress'
         )
         return postModel
 

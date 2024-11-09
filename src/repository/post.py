@@ -18,14 +18,21 @@ class PostRepository:
     @staticmethod
     async def getAllApproved() -> List[PostModel]:
         async with get_async_session() as session:
-            query = select(PostModel).where(PostModel.isApproved == True)
+            query = select(PostModel).where(PostModel.isApproved == 'True')
+            result = await session.execute(query)
+            return result.scalars().all()
+
+    @staticmethod
+    async def getAllApprovedByUser(id_user: int) -> List[PostModel]:
+        async with get_async_session() as session:
+            query = select(PostModel).where(PostModel.idUser == id_user)
             result = await session.execute(query)
             return result.scalars().all()
 
     @staticmethod
     async def getAllNotApproved() -> List[PostModel]:
         async with get_async_session() as session:
-            query = select(PostModel).where(PostModel.isApproved == False)
+            query = select(PostModel).where(PostModel.isApproved == 'in_progress')
             result = await session.execute(query)
             return result.scalars().all()
 
