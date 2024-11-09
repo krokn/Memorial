@@ -12,7 +12,7 @@ class UserModel(Base):
     surname: Mapped[str] = mapped_column()
     fatherName: Mapped[str] = mapped_column()
     email: Mapped[str] = mapped_column(unique=True)
-    isAdmin: Mapped[bool] = mapped_column()
+    isAdmin: Mapped[bool] = mapped_column(default=False)
     idEducationInstitution: Mapped[int] = mapped_column(ForeignKey("educationInstitution.id"))
 
     post: Mapped["PostModel"] = relationship("PostModel", back_populates="user", uselist=True, )

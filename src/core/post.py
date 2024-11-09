@@ -21,7 +21,8 @@ class PostCore:
             x=post.x,
             y=post.y,
             idUser=user.id,
-            isApproved='in_progress'
+            isApproved='in_progress',
+            address=post.address
         )
         return postModel
 

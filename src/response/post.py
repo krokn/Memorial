@@ -9,6 +9,7 @@ async def allPostsJson(posts: List[PostModel]):
             'title': post.title,
             'content': post.content,
             'linkToPhoto': post.linkToPhoto,
+            'address': post.address,
             'x': post.x,
             'y': post.y
         }
@@ -17,7 +18,7 @@ async def allPostsJson(posts: List[PostModel]):
     return posts_dict
 
 
-async def get_all_institution(institutions: List[EducationInstitutionModel]):
+async def get_all_institution_response(institutions: List[EducationInstitutionModel]):
     institutions_dict = [
         {
             'name': institution.name

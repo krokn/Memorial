@@ -18,6 +18,6 @@ class EducationInstitutionRepository:
     @staticmethod
     async def get_all() -> List[EducationInstitutionModel]:
         async with get_async_session() as session:
-            query = select(EducationInstitutionModel).where(EducationInstitutionModel.name == name)
+            query = select(EducationInstitutionModel)
             result = await session.execute(query)
             return result.scalars().all()
