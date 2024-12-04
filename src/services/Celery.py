@@ -12,7 +12,7 @@ celery = Celery('tasks', broker='redis://redis:6379/0', backend='redis://redis:6
 @celery.task
 def send_email(email: str, letter: str):
     msg = MIMEText(f'{letter}', 'plain', 'utf-8')
-    msg['Subject'] = Header('Мобильная игра Шифр', 'utf-8')
+    msg['Subject'] = Header('Сервис "Помни свою историю"', 'utf-8')
     msg['From'] = SMTP_USER
     msg['To'] = ', '.join(email)
 

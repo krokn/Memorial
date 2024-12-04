@@ -25,7 +25,6 @@ async def authUser(user: UserSchemaForAuth):
     return JSONResponse(status_code=HTTPStatus.OK, content='code send success')
 
 
-
 @router.post('login')
 async def loginUser(user: UserSchemaEmail):
     if await UserRepository().get(user.email) is None:
@@ -53,3 +52,4 @@ async def verifyCode(code: int, user: UserSchemaForLoginSendCode):
         raise HTTPException(status_code=406, detail="incorrect code")
     token = Encrypt().create_token(user.email)
     return JSONResponse(status_code=HTTPStatus.OK, content=token)
+
