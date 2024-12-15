@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy import select
 
 from src.database.connection import get_async_session
-from src.database.models import PostModel
+from src.database.models import PostModel, UserModel, EducationInstitutionModel
 
 
 class PostRepository:
@@ -18,9 +18,15 @@ class PostRepository:
     @staticmethod
     async def getAllApproved() -> List[PostModel]:
         async with get_async_session() as session:
-            query = select(PostModel).where(PostModel.isApproved == 'True')
+            query = (
+                select(PostModel, UserModel.name, UserModel.surname, UserModel.fatherName,
+                       EducationInstitutionModel.name.label("institutionName"))
+                .join(UserModel, PostModel.idUser == UserModel.id)
+                .join(EducationInstitutionModel, UserModel.idEducationInstitution == EducationInstitutionModel.id)
+                .where(PostModel.isApproved == 'True')
+            )
             result = await session.execute(query)
-            return result.scalars().all()
+            return result.all()
 
     @staticmethod
     async def getAllApprovedByUser(id_user: int) -> List[PostModel]:
@@ -32,9 +38,21 @@ class PostRepository:
     @staticmethod
     async def getAllNotApproved() -> List[PostModel]:
         async with get_async_session() as session:
-            query = select(PostModel).where(PostModel.isApproved == 'in_progress')
+            query = (
+                select(
+                    PostModel,
+                    UserModel.name,
+                    UserModel.surname,
+                    UserModel.fatherName,
+                    UserModel.email,
+                    EducationInstitutionModel.name.label("institutionName")
+                )
+                .join(UserModel, PostModel.idUser == UserModel.id)
+                .join(EducationInstitutionModel, UserModel.idEducationInstitution == EducationInstitutionModel.id)
+                .where(PostModel.isApproved == 'in_progress')
+            )
             result = await session.execute(query)
-            return result.scalars().all()
+            return result.all()
 
     @staticmethod
     async def getOne(idPost: int) -> PostModel:

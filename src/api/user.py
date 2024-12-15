@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Header
 from loguru import logger
 from starlette.responses import JSONResponse
 
@@ -52,4 +52,13 @@ async def verifyCode(code: int, user: UserSchemaForLoginSendCode):
         raise HTTPException(status_code=406, detail="incorrect code")
     token = Encrypt().create_token(user.email)
     return JSONResponse(status_code=HTTPStatus.OK, content=token)
+
+
+@router.get('/info')
+async def get_info(token: str | None = Header(default=None)):
+    emailUser = Encrypt().get_user_by_token(token)
+    user_data = await UserRepository().get_with_education(emailUser)
+    if user_data:
+        return JSONResponse(status_code=HTTPStatus.OK, content=user_data)
+    return JSONResponse(status_code=HTTPStatus.NOT_FOUND, content={"error": "User not found"})
 

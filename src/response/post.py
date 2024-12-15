@@ -3,15 +3,21 @@ from typing import List
 from src.database.models import PostModel, EducationInstitutionModel
 
 
-async def allPostsJson(posts: List[PostModel]):
+async def allPostsJson(posts):
     posts_dict = [
         {
-            'title': post.title,
-            'content': post.content,
-            'linkToPhoto': post.linkToPhoto,
-            'address': post.address,
-            'x': post.x,
-            'y': post.y
+            'title': post[0].title,
+            'content': post[0].content,
+            'linkToPhoto': post[0].linkToPhoto,
+            'address': post[0].address,
+            'x': post[0].x,
+            'y': post[0].y,
+            'user': {
+                'name': post[1],
+                'surname': post[2],
+                'fatherName': post[3],
+                'educationInstitution': post[4]
+            }
         }
         for post in posts
     ]
@@ -28,17 +34,18 @@ async def get_all_institution_response(institutions: List[EducationInstitutionMo
     return institutions_dict
 
 
-async def allPostsJsonForAdmin(posts: List[PostModel]):
+async def allPostsJsonForAdmin(posts):
     posts_dict = [
         {
-            'id': post.id,
-            'title': post.title,
-            'content': post.content,
-            'linkToPhoto': post.linkToPhoto,
-            'name': post.user.name,
-            'surname': post.user.surname,
-            'fatherName': post.user.fatherName,
-            'email': post.user.email
+            'id': post[0].id,
+            'title': post[0].title,
+            'content': post[0].content,
+            'linkToPhoto': post[0].linkToPhoto,
+            'name': post[1],
+            'surname': post[2],
+            'fatherName': post[3],
+            'email': post[4],
+            'institutionName': post[5]
         }
         for post in posts
     ]
