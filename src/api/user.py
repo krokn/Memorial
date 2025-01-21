@@ -9,27 +9,45 @@ from src.repository.user import UserRepository
 from src.schemas.user import UserSchemaForAuth, UserSchemaEmail, UserSchemaForLoginSendCode
 from src.services.cash import create_code_for_email_and_save_code, redis_client
 from src.services.encrypt import Encrypt
-from src.services.Celery import send_email
+from src.services.Celery import send_email, send_email_html
 
 router = APIRouter(
     prefix="/api/user",
     tags=["Auth"],
 )
 
+def create_email_letter(code: str) -> str:
+    return f"""
+    <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+            <p>Пожалуйста, используйте этот код для подтверждения адреса вашей электронной почты:</p>
+            <h2 style="color: #2E86C1; text-align: center;">{code}</h2>
+            <hr style="border: 1px solid #ddd;">
+            <p>Всероссийский патриотический проект «Карта памяти»</p>
+            <p>Почта технической поддержки: <a href="mailto:memorial.i@yandex.ru">memorial.i@yandex.ru</a></p>
+        </body>
+    </html>
+    """
+
 
 @router.post('')
 async def authUser(user: UserSchemaForAuth):
     if await UserRepository().get(user.email) is not None:
         raise HTTPException(status_code=403, detail=f"user register, can login")
-    send_email.delay(user.email, create_code_for_email_and_save_code(user.email))
-    return JSONResponse(status_code=HTTPStatus.OK, content='code send success')
+
+    code = create_code_for_email_and_save_code(user.email)
+    letter = create_email_letter(code)
+    send_email_html.delay(user.email, letter)
+    return JSONResponse(status_code=HTTPStatus.OK, content='Code sent successfully')
 
 
 @router.post('login')
 async def loginUser(user: UserSchemaEmail):
     if await UserRepository().get(user.email) is None:
         raise HTTPException(status_code=405, detail=f"user dont register, can register")
-    send_email.delay(user.email, create_code_for_email_and_save_code(user.email))
+    code = create_code_for_email_and_save_code(user.email)
+    letter = create_email_letter(code)
+    send_email_html.delay(user.email, letter)
     return JSONResponse(status_code=HTTPStatus.OK, content='code send success')
 
 
