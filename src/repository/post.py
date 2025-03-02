@@ -26,7 +26,7 @@ class PostRepository:
                 .where(PostModel.isApproved == 'True')
             )
             result = await session.execute(query)
-            return result.all()
+            return result.scalars().all()
 
     @staticmethod
     async def getAllApprovedByUser(id_user: int) -> List[PostModel]:
